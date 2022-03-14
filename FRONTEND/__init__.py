@@ -16,3 +16,5 @@ def generate_random_password():
 def create_app():
     app = Flask(__name__)
     app.config['SECRET_KEY'] = generate_random_password
+
+    return app
