@@ -20,4 +20,7 @@ def create_app():
     db.init_app(app)
     create_database(app)
 
+    from .routes import routes
+    app.register_blueprint(routes, url_prefix='/')
+
     return app
