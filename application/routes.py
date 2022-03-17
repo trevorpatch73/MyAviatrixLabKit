@@ -17,13 +17,21 @@ def homepage():
     user = EnvInputTable.query.first()
     if request.method == 'POST':
         form = EnvVarForm()
+        aws_key_id = None
+        aws_key_value = None
+        terraform_org_name = None
+        terraform_api_key = None
         if form.validate_on_submit():
+            aws_key_id = form.aws_key_id.data
+            aws_key_value = form.aws_key_value.data
+            terraform_org_name = form.terraform_org_name.data
+            terraform_api_key = form.terraform_api_key.data
             if user is None:
                 entry = EnvInputTable(
-                    db_aws_key_id=form.aws_key_id,
-                    db_aws_key_value=form.aws_key_value,
-                    db_terraform_org_name=form.terraform_org_name,
-                    db_terraform_api_key=form.terraform_api_key,
+                    db_aws_key_id=aws_key_id,
+                    db_aws_key_value=aws_key_value,
+                    db_terraform_org_name=terraform_org_name,
+                    db_terraform_api_key=terraform_api_key,
                 )
                 db.session.add(entry)
                 db.session.commit()
@@ -35,22 +43,22 @@ def homepage():
                 if form.aws_key_id == '':
                     pass
                 else:
-                    user.db_aws_key_id = form.aws_key_id
+                    user.db_aws_key_id = aws_key_id
                     db.session.commit()
                 if form.aws_key_value == '':
                     pass
                 else:
-                    user.db_aws_key_value = form.aws_key_value
+                    user.db_aws_key_value = aws_key_value
                     db.session.commit()
                 if form.terraform_org_name == '':
                     pass
                 else:
-                    db.db_terraform_org_name = form.terraform_org_name
+                    db.db_terraform_org_name = terraform_org_name
                     db.session.commit()
                 if form.terraform_api_key == '':
                     pass
                 else:
-                    db.db_terraform_org_name = form.terraform_api_key
+                    db.db_terraform_org_name = terraform_api_key
                     db.session.commit()
         else:
             pass
@@ -64,5 +72,9 @@ def homepage():
     return render_template(
         'homepage.html',
         form=form,
-        state=state
+        state=state,
+        aws_key_id=aws_key_id,
+        aws_key_value=aws_key_value,
+        terraform_org_name=terraform_org_name,
+        terraform_api_key=terraform_api_key
     )
