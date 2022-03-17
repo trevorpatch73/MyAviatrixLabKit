@@ -35,9 +35,6 @@ def homepage():
                 )
                 db.session.add(entry)
                 db.session.commit()
-                user = EnvStateTable.query.first()
-                user.db_environment_state = 'new'
-                db.session.commit()
                 return redirect(url_for('routes.homepage'))
             else:
                 if form.aws_key_id == '':
@@ -67,6 +64,15 @@ def homepage():
     environment = EnvStateTable.query.first()
     if environment is None:
         state = 'new'
+        entry = EnvStateTable(
+            db_environment_state=state,
+            db_aviatrix_sst_public_ip=state,
+            db_aviatrix_controller_public_ip=state,
+            db_intital_launch_tf_workspace_id=state,
+            db_intital_launch_tf_config_id=state
+        )
+        db.session.add(entry)
+        db.session.commit()
     else:
         state = environment.db_environment_state
     return render_template(
