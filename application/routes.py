@@ -1,3 +1,4 @@
+from hashlib import new
 from flask import *
 from .forms import EnvVarForm
 from .data_models import EnvInputTable, EnvStateTable
@@ -56,7 +57,10 @@ def homepage():
     else:
         form = EnvVarForm()
     environment = EnvStateTable.query.first()
-    state = environment.db_environment_state
+    if environment is None:
+        state = 'new'
+    else:
+        state = environment.db_environment_state
     return render_template(
         'homepage.html',
         form=form,
