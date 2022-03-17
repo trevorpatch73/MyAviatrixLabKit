@@ -52,12 +52,12 @@ def homepage():
                 if form.terraform_org_name == '':
                     pass
                 else:
-                    db.db_terraform_org_name = terraform_org_name
+                    user.db_terraform_org_name = terraform_org_name
                     db.session.commit()
                 if form.terraform_api_key == '':
                     pass
                 else:
-                    db.db_terraform_org_name = terraform_api_key
+                    user.db_terraform_api_key = terraform_api_key
                     db.session.commit()
                 return redirect(url_for('routes.homepage'))
         else:
