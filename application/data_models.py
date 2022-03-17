@@ -33,6 +33,10 @@ class EnvInputTable(db.Model):
 
 class EnvStateTable(db.Model):
     __tablename__ = 'Environmental State Table'
+    id = db.Column(
+        db.Integer,
+        primary_key=True
+    )
     db_environment_state = db.Column(
         db.String(100),
         nullable=True,
