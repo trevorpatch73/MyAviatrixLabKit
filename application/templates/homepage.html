@@ -18,7 +18,9 @@
         {{ form.terraform_org_name(class="form-control") }}
         {{ form.terraform_api_key.label(class="form-label") }}
         {{ form.terraform_api_key(class="form-control") }}
-    </div>   
+        <br/><br/>
+    </div>
+    {{ form.submit(class="btn btn-dark") }}  
 </form>
 
 {% endblock %}
