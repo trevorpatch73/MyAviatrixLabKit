@@ -31,7 +31,7 @@
     <div class="container shadow-lg p-3 mb-5 bg-body rounded bg-dark text-light">
         {% if state == 'provision_controller'%}
         <input type="submit" class="btn btn-success" value="Launch Environment">
-        {% elif state != 'new' or state is not None %}
+        {% elif (state != 'new') or (state is not None) %}
         <input type="submit" class="btn btn-danger" value="Destory Environment">
         <a href="#" class="btn btn-info" role="button">Go To Controller</a>
         {% else %}
