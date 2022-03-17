@@ -9,11 +9,6 @@ class EnvVarTable(db.Model):
         db.Integer,
         primary_key=True
     )
-    environment_state = db.Column(
-        db.String(100),
-        nullable=True,
-        unique=True
-    )
     db_aws_key_id = db.Column(
         db.String(100),
         nullable=True,
@@ -31,6 +26,32 @@ class EnvVarTable(db.Model):
     )
     db_terraform_api_key = db.Column(
         db.String(100),
+        nullable=True,
+        unique=True
+    )
+
+    db_environment_state = db.Column(
+        db.String(100),
+        nullable=True,
+        unique=True
+    )
+    db_aviatrix_sst_public_ip = db.Column(
+        db.String(100),
+        nullable=True,
+        unique=True
+    )
+    db_aviatrix_controller_public_ip = db.Column(
+        db.String(100),
+        nullable=True,
+        unique=True
+    )
+    db_intital_launch_tf_workspace_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
+    db_intital_launch_tf_config_id = db.Column(
+        db.String(1000),
         nullable=True,
         unique=True
     )
