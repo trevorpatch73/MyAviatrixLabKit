@@ -1,7 +1,24 @@
 {% extends "base.html" %}
-{% block title %}Home Page{% endblock %}
+{% block title %}My Aviatrix Lab Kit - Home Page{% endblock %}
 {% block content %}
 
-<h>PlaceHolder</h>
+<h1>Environment Inputs</h1>
+<form method = "POST">
+    <div class="shadow-lg p-3 mb-5 bg-body rounded bg-dark text-light">
+        {{ form.hidden_tag() }}
+        <br/>
+        <h5 class="card-title">Amazon Web Services (AWS)</h5>
+        {{ form.aws_key_id.label(class="form-label") }}
+        {{ form.aws_key_id(class="form-control") }}
+        {{ form.aws_key_value.label(class="form-label") }}
+        {{ form.aws_key_value(class="form-control") }}              
+        <br/><br/>
+        <h5 class="card-title">Terraform Cloud Provider</h5>
+        {{ form.terraform_org_name.label(class="form-label") }}
+        {{ form.terraform_org_name(class="form-control") }}
+        {{ form.terraform_api_key.label(class="form-label") }}
+        {{ form.terraform_api_key(class="form-control") }}
+    </div>   
+</form>
 
 {% endblock %}
