@@ -21,7 +21,7 @@ def create_app():
 
     app.config['SQLALCHEMY_DATABASE_URI'] = f'sqlite:///{DB_NAME}'
     db.init_app(app)
-    from .data_models import EnvVarTable
+    from .data_models import EnvInputTable, EnvStateTable
     create_database(app)
 
     from .routes import routes

@@ -3,8 +3,8 @@ from flask_sqlalchemy import *
 from sqlalchemy.sql import *
 
 
-class EnvVarTable(db.Model):
-    __tablename__ = 'Environmental Variables Table'
+class EnvInputTable(db.Model):
+    __tablename__ = 'Environmental Input Table'
     id = db.Column(
         db.Integer,
         primary_key=True
@@ -30,6 +30,9 @@ class EnvVarTable(db.Model):
         unique=True
     )
 
+
+class EnvStateTable(db.Model):
+    __tablename__ = 'Environmental State Table'
     db_environment_state = db.Column(
         db.String(100),
         nullable=True,

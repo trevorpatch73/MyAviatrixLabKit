@@ -1,6 +1,6 @@
 from flask import *
 from .forms import EnvVarForm
-from .data_models import EnvVarTable
+from .data_models import EnvInputTable, EnvStateTable
 from . import db
 
 routes = Blueprint('routes', __name__)
@@ -13,23 +13,21 @@ def default():
 
 @routes.route('/homepage', methods=['GET', 'POST'])
 def homepage():
-    user = EnvVarTable.query.first()
+    user = EnvInputTable.query.first()
     if request.method == 'POST':
         form = EnvVarForm()
         if form.validate_on_submit():
             if user is None:
-                entry = EnvVarTable(
+                entry = EnvInputTable(
                     db_aws_key_id=form.aws_key_id,
                     db_aws_key_value=form.aws_key_value,
                     db_terraform_org_name=form.terraform_org_name,
                     db_terraform_api_key=form.terraform_api_key,
-                    db_environment_state='new',
-                    db_aviatrix_sst_public_ip='',
-                    db_aviatrix_controller_public_ip='',
-                    db_intital_launch_tf_workspace_id='',
-                    db_intital_launch_tf_config_id='',
                 )
                 db.session.add(entry)
+                db.session.commit()
+                user = EnvStateTable.query.first()
+                user.db_environment_state = 'new'
                 db.session.commit()
                 return redirect(url_for('routes.homepage'))
             else:
@@ -57,7 +55,10 @@ def homepage():
             pass
     else:
         form = EnvVarForm()
+    environment = EnvStateTable.query.first()
+    state = environment.db_environment_state
     return render_template(
         'homepage.html',
-        form=form
+        form=form,
+        state=state
     )
