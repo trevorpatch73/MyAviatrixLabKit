@@ -23,7 +23,9 @@
     {{ form.submit(class="btn btn-dark") }}  
 </form>
 
-{% if state != ''%}
+{{state}}
+
+{% if state != '' and state != 'None' %}
 <h1>Macro Environment Controls</h1>
 <form method = "POST">
     <div class="container shadow-lg p-3 mb-5 bg-body rounded bg-dark text-light">
