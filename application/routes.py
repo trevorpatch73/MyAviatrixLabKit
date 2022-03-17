@@ -59,6 +59,7 @@ def homepage():
                 else:
                     db.db_terraform_org_name = terraform_api_key
                     db.session.commit()
+                return redirect(url_for('routes.homepage'))
         else:
             pass
     else:
