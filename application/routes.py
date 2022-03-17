@@ -20,6 +20,7 @@ def homepage():
     aws_key_value = None
     terraform_org_name = None
     terraform_api_key = None
+    state = None
     if request.method == 'POST':
         form = EnvVarForm()
         if form.validate_on_submit():
@@ -75,9 +76,9 @@ def homepage():
         db.session.commit()
     elif user is not None:
         aws_key_id = user.db_aws_key_id
-        aws_key_value = user.user.db_aws_key_value
-        terraform_org_name = db.db_terraform_org_name
-        terraform_api_key = db.db_terraform_org_name
+        aws_key_value = user.db_aws_key_value
+        terraform_org_name = user.db_terraform_org_name
+        terraform_api_key = user.db_terraform_api_key
 
         if aws_key_id != '' and aws_key_value != '' and terraform_org_name != '' and terraform_api_key != '':
             state = 'provision_controller'
