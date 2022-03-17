@@ -22,7 +22,12 @@ def homepage():
                     db_aws_key_id=form.aws_key_id,
                     db_aws_key_value=form.aws_key_value,
                     db_terraform_org_name=form.terraform_org_name,
-                    db_terraform_api_key=form.terraform_api_key
+                    db_terraform_api_key=form.terraform_api_key,
+                    db_environment_state='new',
+                    db_aviatrix_sst_public_ip='',
+                    db_aviatrix_controller_public_ip='',
+                    db_intital_launch_tf_workspace_id='',
+                    db_intital_launch_tf_config_id='',
                 )
                 db.session.add(entry)
                 db.session.commit()
