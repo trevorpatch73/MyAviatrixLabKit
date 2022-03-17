@@ -15,6 +15,7 @@ def default():
 @routes.route('/homepage', methods=['GET', 'POST'])
 def homepage():
     user = EnvInputTable.query.first()
+    environment = EnvStateTable.query.first()
     aws_key_id = None
     aws_key_value = None
     terraform_org_name = None
@@ -61,7 +62,6 @@ def homepage():
             pass
     else:
         form = EnvVarForm()
-    environment = EnvStateTable.query.first()
     if environment is None:
         state = 'new'
         entry = EnvStateTable(
