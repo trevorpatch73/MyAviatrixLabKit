@@ -25,13 +25,13 @@
 
 {{state}}
 
-{% if state != '' and state != 'None' %}
+{% if state != ''%}
 <h1>Macro Environment Controls</h1>
 <form method = "POST">
     <div class="container shadow-lg p-3 mb-5 bg-body rounded bg-dark text-light">
         {% if state == 'provision_controller'%}
         <input type="submit" class="btn btn-success" value="Launch Environment">
-        {% elif state != 'new' %}
+        {% elif state != 'new' or state != 'None' %}
         <input type="submit" class="btn btn-danger" value="Destory Environment">
         <a href="#" class="btn btn-info" role="button">Go To Controller</a>
         {% else %}
