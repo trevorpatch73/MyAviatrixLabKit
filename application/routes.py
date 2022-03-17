@@ -73,13 +73,16 @@ def homepage():
         )
         db.session.add(entry)
         db.session.commit()
-    elif user.db_aws_key_id is not None:
-        if user.db_aws_key_value is not None:
-            if user.db_terraform_org_name is not None:
-                if user.db_terraform_api_key is not None:
-                    state = 'provision_controller'
-                    environment.db_environment_state = state
-                    db.session.commit()
+    elif user is not None:
+        aws_key_id = user.db_aws_key_id
+        aws_key_value = user.user.db_aws_key_value
+        terraform_org_name = db.db_terraform_org_name
+        terraform_api_key = db.db_terraform_org_name
+
+        if aws_key_id != '' and aws_key_value != '' and terraform_org_name != '' and terraform_api_key != '':
+            state = 'provision_controller'
+            environment.db_environment_state = state
+            db.session.commit()
     else:
         state = environment.db_environment_state
     return render_template(
