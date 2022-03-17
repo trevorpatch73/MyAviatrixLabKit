@@ -52,12 +52,12 @@ class EnvStateTable(db.Model):
         nullable=True,
         unique=True
     )
-    db_intital_launch_tf_workspace_id = db.Column(
+    db_controller_workspace_id = db.Column(
         db.String(1000),
         nullable=True,
         unique=True
     )
-    db_intital_launch_tf_config_id = db.Column(
+    db_aviatrix_controller_tf_config_id = db.Column(
         db.String(1000),
         nullable=True,
         unique=True
