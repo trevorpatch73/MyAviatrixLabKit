@@ -15,12 +15,12 @@ def default():
 @routes.route('/homepage', methods=['GET', 'POST'])
 def homepage():
     user = EnvInputTable.query.first()
+    aws_key_id = None
+    aws_key_value = None
+    terraform_org_name = None
+    terraform_api_key = None
     if request.method == 'POST':
         form = EnvVarForm()
-        aws_key_id = None
-        aws_key_value = None
-        terraform_org_name = None
-        terraform_api_key = None
         if form.validate_on_submit():
             aws_key_id = form.aws_key_id.data
             aws_key_value = form.aws_key_value.data
