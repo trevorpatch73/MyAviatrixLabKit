@@ -3,7 +3,7 @@ from flask import *
 from .forms import EnvVarForm
 from .data_models import EnvInputTable, EnvStateTable
 from . import db
-from .buttons import Launch_Environment
+from .buttons import Launch_Environment, Destroy_Environment
 
 routes = Blueprint('routes', __name__)
 
@@ -62,6 +62,10 @@ def homepage():
                     db.session.commit()
         else:
             pass
+        if request.form['submit_botton'] == 'Launch Environment':
+            Launch_Environment()
+        if request.form['submit_botton'] == 'Destroy Environment':
+            Destroy_Environment()
     else:
         form = EnvVarForm()
     if environment is None:
