@@ -231,7 +231,7 @@ def Destroy_Environment():
     # Step Two: Delete the TF Workspace
 
     url = ('https://' + terraform_url + "/organizations/" +
-           terraform_org_name + "/workspaces/LABKIT_AVIATRIX_CONTROLLER_WORKSPACE")
+           terraform_org_name + "/workspaces/MY_AVIATRIX_LAB_KIT_CONTROLLER_WORKSPACE")
 
     response = requests.delete(url, headers={
         'Authorization': 'Bearer ' + terraform_api_key, 'Content-Type': 'application/vnd.api+json'})
