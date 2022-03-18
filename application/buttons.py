@@ -137,7 +137,7 @@ def Launch_Environment():
     response = requests.put(upload_url, data=data,
                             headers={'Content-Type': 'application/octet-stream'})
 
-    sleep(150)
+    sleep(300)
 
     url = ''
     jsonData = ''
