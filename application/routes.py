@@ -74,8 +74,8 @@ def homepage():
             db_environment_state=state,
             db_aviatrix_sst_public_ip=state,
             db_aviatrix_controller_public_ip=state,
-            db_intital_launch_tf_workspace_id=state,
-            db_intital_launch_tf_config_id=state
+            db_controller_workspace_id=state,
+            db_aviatrix_controller_tf_config_id=state
         )
         db.session.add(entry)
         db.session.commit()
