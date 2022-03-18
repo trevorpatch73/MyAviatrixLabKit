@@ -62,10 +62,18 @@ def homepage():
                     db.session.commit()
         else:
             pass
-        if request.form['submit_botton'] == 'Launch Environment':
+        if request.form['submit_button'] == 'Launch Environment':
             Launch_Environment()
-        if request.form['submit_botton'] == 'Destroy Environment':
+            state = 'launched'
+            environment.db_environment_state = state
+            db.session.commit()
+            return redirect(url_for('routes.homepage'))
+        if request.form['submit_button'] == 'Destroy Environment':
             Destroy_Environment()
+            state = 'new'
+            environment.db_environment_state = state
+            db.session.commit()
+            return redirect(url_for('routes.homepage'))
     else:
         form = EnvVarForm()
     if environment is None:
@@ -87,7 +95,8 @@ def homepage():
         aws_key_value = user.db_aws_key_value
         terraform_org_name = user.db_terraform_org_name
         terraform_api_key = user.db_terraform_api_key
-        if aws_key_id != '' and aws_key_value != '' and terraform_org_name != '' and terraform_api_key != '':
+        state = environment.environment.db_environment_state
+        if aws_key_id != '' and aws_key_value != '' and terraform_org_name != '' and terraform_api_key != '' and state != 'launched':
             state = 'provision_controller'
             environment.db_environment_state = state
             db.session.commit()
