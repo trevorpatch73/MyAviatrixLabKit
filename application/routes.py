@@ -95,7 +95,7 @@ def homepage():
         aws_key_value = user.db_aws_key_value
         terraform_org_name = user.db_terraform_org_name
         terraform_api_key = user.db_terraform_api_key
-        state = environment.environment.db_environment_state
+        state = environment.db_environment_state
         if aws_key_id != '' and aws_key_value != '' and terraform_org_name != '' and terraform_api_key != '' and state != 'launched':
             state = 'provision_controller'
             environment.db_environment_state = state
