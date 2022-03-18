@@ -184,8 +184,8 @@ def Launch_Environment():
 def Destroy_Environment():
     user = EnvInputTable.query.first()
     environment = EnvStateTable.query.first()
-    terraform_api_key = environment.db_terraform_api_key
-    terraform_org_name = environment.db_terraform_org_name
+    terraform_api_key = user.db_terraform_api_key
+    terraform_org_name = user.db_terraform_org_name
     terraform_header = {
         'Authorization': 'Bearer ' + terraform_api_key,
         'Content-Type': 'application/vnd.api+json'
