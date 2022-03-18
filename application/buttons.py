@@ -184,8 +184,8 @@ def Launch_Environment():
 def Destroy_Environment():
     user = EnvInputTable.query.first()
     environment = EnvStateTable.query.first()
-    terraform_api_key = user.db_terraform_api_key
-    terraform_org_name = user.db_terraform_org_name
+    terraform_api_key = environment.db_terraform_api_key
+    terraform_org_name = environment.db_terraform_org_name
     terraform_header = {
         'Authorization': 'Bearer ' + terraform_api_key,
         'Content-Type': 'application/vnd.api+json'
@@ -222,7 +222,7 @@ def Destroy_Environment():
     }
 
     response = requests.post(url, json=jsonData, headers=terraform_header)
-    sleep(300)
+    sleep(200)
 
     url = ''
     jsonData = ''
@@ -232,5 +232,6 @@ def Destroy_Environment():
 
     url = ('https://' + terraform_url + "/organizations/" +
            terraform_org_name + "/workspaces/LABKIT_AVIATRIX_CONTROLLER_WORKSPACE")
+
     response = requests.delete(url, headers={
         'Authorization': 'Bearer ' + terraform_api_key, 'Content-Type': 'application/vnd.api+json'})

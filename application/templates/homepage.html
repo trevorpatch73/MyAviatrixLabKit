@@ -31,7 +31,8 @@
         <input type="submit" name="submit_button" class="btn btn-success" value="Launch Environment">
         {% elif state != 'new' %}
         <input type="submit" name="submit_button" class="btn btn-danger" value="Destroy Environment">
-        <a href="#" class="btn btn-info" role="button">Go To Controller</a>
+        <a href="#" class="btn btn-info" role="button">Go To Controller/CoPilot</a>
+        <a href="https://{{aviatrix_sst_public_ip}}" class="btn btn-info" role="button">Go To SST</a>
         {% else %}
         <b>This section is disabled until all requirements inputs are made</b>
         {%- endif %}

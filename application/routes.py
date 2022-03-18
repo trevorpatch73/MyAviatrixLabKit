@@ -88,7 +88,9 @@ def homepage():
         db.session.add(entry)
         db.session.commit()
     else:
+
         state = environment.db_environment_state
+        aviatrix_sst_public_ip = environment.db_aviatrix_sst_public_ip
 
     if user is not None:
         aws_key_id = user.db_aws_key_id
@@ -108,5 +110,6 @@ def homepage():
         aws_key_id=aws_key_id,
         aws_key_value=aws_key_value,
         terraform_org_name=terraform_org_name,
-        terraform_api_key=terraform_api_key
+        terraform_api_key=terraform_api_key,
+        aviatrix_sst_public_ip=aviatrix_sst_public_ip
     )
