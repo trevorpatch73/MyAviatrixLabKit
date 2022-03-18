@@ -150,7 +150,7 @@ def Launch_Environment():
     tf_workspace_id = environment.db_controller_workspace_id
     print(tf_workspace_id)
 
-    url = ('https://' + terraform_api_key +
+    url = ('https://' + terraform_url +
            '/workspaces/' + tf_workspace_id + '/runs')
     print(url)
 
