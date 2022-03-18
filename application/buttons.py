@@ -5,6 +5,8 @@ import requests
 from time import sleep
 from os import *
 from pathlib import Path
+import json
+from json import JSONEncoder, JSONDecoder
 
 
 def Launch_Environment():
@@ -137,7 +139,7 @@ def Launch_Environment():
     response = requests.put(upload_url, data=data,
                             headers={'Content-Type': 'application/octet-stream'})
 
-    sleep(300)
+    sleep(200)
 
     url = ''
     jsonData = ''
@@ -146,9 +148,11 @@ def Launch_Environment():
     # Step Five: Get the Terraform Coud Run-ID in order to get output file
     environment = EnvStateTable.query.first()
     tf_workspace_id = environment.db_controller_workspace_id
+    print(tf_workspace_id)
 
     url = ('https://' + terraform_api_key +
            '/workspaces/' + tf_workspace_id + '/runs')
+    print(url)
 
     response = requests.get(url, headers=terraform_header)
     data_json = response.json()
