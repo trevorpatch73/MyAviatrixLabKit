@@ -131,7 +131,8 @@ def Launch_Environment():
     environment.db_aviatrix_controller_tf_config_id = config_id
     db.session.commit()
 
-    # Step Four: Upload AviatrixContoller.tar.gz to Terraform to deploy AWS elements & Aviatrix Controller within
+    # Step Four: Upload AviatrixContoller.tar.gz to Terraform to deploy AWS elements &
+    # Aviatrix Controller within
     p = Path(__file__).with_name('launch_environment.tar.gz')
     with p.open('rb') as f:
         data = f.read()
