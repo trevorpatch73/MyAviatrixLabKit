@@ -22,6 +22,7 @@ def homepage():
     terraform_org_name = None
     terraform_api_key = None
     state = None
+    aviatrix_sst_public_ip = None
     if request.method == 'POST':
         form = EnvVarForm()
         if form.validate_on_submit():
