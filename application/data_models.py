@@ -29,6 +29,11 @@ class EnvInputTable(db.Model):
         nullable=True,
         unique=True
     )
+    db_recovery_email = db.Column(
+        db.String(100),
+        nullable=True,
+        unique=True
+    )
 
 
 class EnvStateTable(db.Model):

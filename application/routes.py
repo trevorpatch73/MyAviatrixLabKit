@@ -4,6 +4,7 @@ from .forms import EnvVarForm
 from .data_models import EnvInputTable, EnvStateTable
 from . import db
 from .buttons import Launch_Environment, Destroy_Environment
+from .sst_fx import sst_mode_selection, sst_aws_config, sst_launch_controller, sst_launch_transit_aws, sst_launch_ec2_spokevpc, sst_skip_transit_azure, sst_controller_ip, sst_delete_resources
 
 routes = Blueprint('routes', __name__)
 
@@ -21,8 +22,10 @@ def homepage():
     aws_key_value = None
     terraform_org_name = None
     terraform_api_key = None
+    recovery_email = None
     state = None
     aviatrix_sst_public_ip = None
+    aviatrix_controller_public_ip = None
     if request.method == 'POST':
         form = EnvVarForm()
         if form.validate_on_submit():
@@ -30,12 +33,14 @@ def homepage():
             aws_key_value = form.aws_key_value.data
             terraform_org_name = form.terraform_org_name.data
             terraform_api_key = form.terraform_api_key.data
+            recovery_email = form.recovery_email.data
             if user is None:
                 entry = EnvInputTable(
                     db_aws_key_id=aws_key_id,
                     db_aws_key_value=aws_key_value,
                     db_terraform_org_name=terraform_org_name,
                     db_terraform_api_key=terraform_api_key,
+                    db_recovery_email=recovery_email,
                 )
                 db.session.add(entry)
                 db.session.commit()
@@ -61,15 +66,28 @@ def homepage():
                 else:
                     user.db_terraform_api_key = terraform_api_key
                     db.session.commit()
+                if form.recovery_email == '':
+                    pass
+                else:
+                    user.db_recovery_email = recovery_email
+                    db.session.commit()
         else:
             pass
         if request.form['submit_button'] == 'Launch Environment':
             Launch_Environment()
+            sst_mode_selection()
+            sst_aws_config()
+            sst_launch_controller()
+            sst_launch_transit_aws()
+            sst_launch_ec2_spokevpc()
+            sst_skip_transit_azure()
+            sst_controller_ip()
             state = 'launched'
             environment.db_environment_state = state
             db.session.commit()
             return redirect(url_for('routes.homepage'))
         if request.form['submit_button'] == 'Destroy Environment':
+            sst_delete_resources()
             Destroy_Environment()
             state = 'new'
             environment.db_environment_state = state
@@ -92,6 +110,7 @@ def homepage():
 
         state = environment.db_environment_state
         aviatrix_sst_public_ip = environment.db_aviatrix_sst_public_ip
+        aviatrix_controller_public_ip = environment.db_aviatrix_controller_public_ip
 
     if user is not None:
         aws_key_id = user.db_aws_key_id
@@ -112,5 +131,6 @@ def homepage():
         aws_key_value=aws_key_value,
         terraform_org_name=terraform_org_name,
         terraform_api_key=terraform_api_key,
-        aviatrix_sst_public_ip=aviatrix_sst_public_ip
+        aviatrix_sst_public_ip=aviatrix_sst_public_ip,
+        aviatrix_controller_public_ip=aviatrix_controller_public_ip
     )
