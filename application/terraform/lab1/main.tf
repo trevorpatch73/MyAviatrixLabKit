@@ -3,7 +3,7 @@ terraform {
   required_providers {
     aviatrix = {
       source = "AviatrixSystems/aviatrix"
-      version = "2.20.1"
+      version = "2.21.0"
     }
   }
 }
@@ -35,6 +35,9 @@ resource "aviatrix_vpc" "AWS-US-E2-TRNST-VPC" {
   cidr                 = "30.1.0.0/20"
   aviatrix_transit_vpc = true
   aviatrix_firenet_vpc = false
+  depends_on           = [
+      aviatrix_account.aws_account,
+  ]
 }
 
 # Create US-East-2 Shared Services VPC
@@ -46,6 +49,9 @@ resource "aviatrix_vpc" "AWS-US-E2-SHR-SVCS-VPC" {
   cidr                 = "30.0.1.0/24"
   aviatrix_transit_vpc = false
   aviatrix_firenet_vpc = false
+  depends_on           = [
+      aviatrix_account.aws_account,
+  ]
 }
 
 # Create US-WEST-2 BU1 VPC
@@ -57,6 +63,9 @@ resource "aviatrix_vpc" "AWS-US-W2-BU1-MONO-VPC" {
   cidr                 = "30.0.2.0/24"
   aviatrix_transit_vpc = false
   aviatrix_firenet_vpc = false
+  depends_on           = [
+      aviatrix_account.aws_account,
+  ]
 }
 
 # Create an Aviatrix AWS Transit Network Gateway
@@ -68,9 +77,6 @@ resource "aviatrix_transit_gateway" "AWS-US-E2-TRNST-GW" {
   vpc_reg                  = "us-east-2"
   gw_size                  = "t2.micro"
   subnet                   = aviatrix_vpc.AWS-US-E2-TRNST-VPC.public_subnets[0].cidr
-  ha_subnet                = aviatrix_vpc.AWS-US-E2-TRNST-VPC.public_subnets[0].cidr
-  ha_gw_size               = "t2.micro"
-  enable_active_mesh       = false
   tags                     = {
     name = "aviatrix"
   }
@@ -89,9 +95,6 @@ resource "aviatrix_spoke_gateway" "AWS-US-E2-SHR-SVCS-SPOKE-GW" {
   subnet                            = aviatrix_vpc.AWS-US-E2-SHR-SVCS-VPC.public_subnets[0].cidr
   single_ip_snat                    = false
   manage_transit_gateway_attachment = false
-  enable_active_mesh       = false
-#  manage_transit_gateway_attachment = true
-#  transit_gw			    = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
   allocate_new_eip                  = true
   tags                              = {
     name = "aviatrix"
@@ -109,9 +112,6 @@ resource "aviatrix_spoke_gateway" "AWS-US-W2-BU1-MONO-SPOKE-GW" {
   subnet                            = aviatrix_vpc.AWS-US-W2-BU1-MONO-VPC.public_subnets[0].cidr
   single_ip_snat                    = false
   manage_transit_gateway_attachment = false
-  enable_active_mesh       = false
-#  manage_transit_gateway_attachment = true
-#  transit_gw			    = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
   allocate_new_eip                  = true
   tags                              = {
     name = "aviatrix"
@@ -119,11 +119,11 @@ resource "aviatrix_spoke_gateway" "AWS-US-W2-BU1-MONO-SPOKE-GW" {
 }
 
 # Create an Aviatrix Spoke Transit Attachment
-resource "aviatrix_spoke_transit_attachment" "SS-SPOKE_TRNST_ATTACHMENT" {
-  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-E2-SHR-SVCS-SPOKE-GW.gw_name
-  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
-}
-resource "aviatrix_spoke_transit_attachment" "BU1-SPOKE_TRNST_ATTACHMENT" {
-  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-W2-BU1-MONO-SPOKE-GW.gw_name
-  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
-}
+#resource "aviatrix_spoke_transit_attachment" "SS-SPOKE_TRNST_ATTACHMENT" {
+#  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-E2-SHR-SVCS-SPOKE-GW.gw_name
+#  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
+#}
+#resource "aviatrix_spoke_transit_attachment" "BU1-SPOKE_TRNST_ATTACHMENT" {
+#  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-W2-BU1-MONO-SPOKE-GW.gw_name
+#  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
+#}
