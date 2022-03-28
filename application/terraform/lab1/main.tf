@@ -13,9 +13,7 @@ provider "aviatrix" {
   controller_ip           = var.controller_ip
   username                = "admin"
   password                = "P@ssw0rd"
-  skip_version_validation = false
-  verify_ssl_certificate  = false
-  path_to_ca_certificate  = "/path/to/ca/cert.crt"
+  skip_version_validation = true
 }
 
 # Onboard AWS Account
@@ -66,16 +64,17 @@ resource "aviatrix_transit_gateway" "AWS-US-E2-TRNST-GW" {
   cloud_type               = 1
   account_name             = var.aws_acct_num
   gw_name                  = "AWS-US-E2-TRNST-GW"
-  vpc_id                   = "AWS-US-E2-TRNST-VPC"
+  vpc_id                   = aviatrix_vpc.AWS-US-E2-TRNST-VPC.vpc_id
   vpc_reg                  = "us-east-2"
   gw_size                  = "t2.micro"
-  subnet                   = "30.1.0.64/28"
-  ha_subnet                = "30.1.0.64/28"
+  subnet                   = aviatrix_vpc.AWS-US-E2-TRNST-VPC.public_subnets[0].cidr
+  ha_subnet                = aviatrix_vpc.AWS-US-E2-TRNST-VPC.public_subnets[0].cidr
   ha_gw_size               = "t2.micro"
+  enable_active_mesh       = false
   tags                     = {
     name = "aviatrix"
   }
-  enable_hybrid_connection = true
+  enable_hybrid_connection = false
   connected_transit        = true
 }
 
@@ -84,12 +83,15 @@ resource "aviatrix_spoke_gateway" "AWS-US-E2-SHR-SVCS-SPOKE-GW" {
   cloud_type                        = 1
   account_name                      = var.aws_acct_num
   gw_name                           = "AWS-US-E2-SHR-SVCS-SPOKE-GW"
-  vpc_id                            = "AWS-US-E2-SHR-SVCS-VPC"
+  vpc_id                            = aviatrix_vpc.AWS-US-E2-SHR-SVCS-VPC.vpc_id
   vpc_reg                           = "us-east-2"
   gw_size                           = "t2.micro"
-  subnet                            = "30.0.1.48/28"
+  subnet                            = aviatrix_vpc.AWS-US-E2-SHR-SVCS-VPC.public_subnets[0].cidr
   single_ip_snat                    = false
   manage_transit_gateway_attachment = false
+  enable_active_mesh       = false
+#  manage_transit_gateway_attachment = true
+#  transit_gw			    = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
   allocate_new_eip                  = true
   tags                              = {
     name = "aviatrix"
@@ -101,12 +103,15 @@ resource "aviatrix_spoke_gateway" "AWS-US-W2-BU1-MONO-SPOKE-GW" {
   cloud_type                        = 1
   account_name                      = var.aws_acct_num
   gw_name                           = "AWS-US-W2-BU1-MONO-SPOKE-GW"
-  vpc_id                            = "AWS-US-W2-BU1-MONO-VPC"
+  vpc_id                            = aviatrix_vpc.AWS-US-W2-BU1-MONO-VPC.vpc_id
   vpc_reg                           = "us-west-2"
   gw_size                           = "t2.micro"
-  subnet                            = "30.0.2.64/28"
+  subnet                            = aviatrix_vpc.AWS-US-W2-BU1-MONO-VPC.public_subnets[0].cidr
   single_ip_snat                    = false
   manage_transit_gateway_attachment = false
+  enable_active_mesh       = false
+#  manage_transit_gateway_attachment = true
+#  transit_gw			    = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
   allocate_new_eip                  = true
   tags                              = {
     name = "aviatrix"
@@ -115,10 +120,10 @@ resource "aviatrix_spoke_gateway" "AWS-US-W2-BU1-MONO-SPOKE-GW" {
 
 # Create an Aviatrix Spoke Transit Attachment
 resource "aviatrix_spoke_transit_attachment" "SS-SPOKE_TRNST_ATTACHMENT" {
-  spoke_gw_name   = "AWS-US-E2-SHR-SVCS-SPOKE-GW"
-  transit_gw_name = "AWS-US-E2-TRNST-GW"
+  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-E2-SHR-SVCS-SPOKE-GW.gw_name
+  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
 }
 resource "aviatrix_spoke_transit_attachment" "BU1-SPOKE_TRNST_ATTACHMENT" {
-  spoke_gw_name   = "AWS-US-W2-BU1-MONO-SPOKE-GW"
-  transit_gw_name = "AWS-US-E2-TRNST-GW"
+  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-W2-BU1-MONO-SPOKE-GW.gw_name
+  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
 }
