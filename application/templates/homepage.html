@@ -8,6 +8,8 @@
         {{ form.hidden_tag() }}
         <br/>
         <h5 class="card-title">Amazon Web Services (AWS)</h5>
+        {{ form.aws_acct_num.label(class="form-label") }}
+        {{ form.aws_acct_num(class="form-control") }}        
         {{ form.aws_key_id.label(class="form-label") }}
         {{ form.aws_key_id(class="form-control") }}
         {{ form.aws_key_value.label(class="form-label") }}
