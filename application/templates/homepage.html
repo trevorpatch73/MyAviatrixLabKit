@@ -46,4 +46,20 @@
 </form>
 {% endif %}
 
+{% if state == 'launched'%}
+<h1>Automated Lab Deployment Controls</h1>
+<form method = "POST">
+    <div class="container shadow-lg p-3 mb-5 bg-body rounded bg-dark text-light">
+        {% if state == 'launched'%}
+        <input type="submit" name="submit_button" class="btn btn-success" value="Launch Environment">
+        {% elif state != 'active-lab' %}
+        <input type="submit" name="submit_button" class="btn btn-danger" value="Destroy Environment">
+        <br/><br/>
+        {% else %}
+        <b>This section is disabled until all requirements inputs are made</b>
+        {%- endif %}
+    </div>
+</form>
+{% endif %}
+
 {% endblock %}
