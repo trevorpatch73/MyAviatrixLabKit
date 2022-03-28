@@ -9,6 +9,11 @@ class EnvInputTable(db.Model):
         db.Integer,
         primary_key=True
     )
+    db_aws_acct_num = db.Column(
+        db.String(100),
+        nullable=True,
+        unique=True
+    )
     db_aws_key_id = db.Column(
         db.String(100),
         nullable=True,

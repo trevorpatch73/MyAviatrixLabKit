@@ -19,6 +19,7 @@ def default():
 def homepage():
     user = EnvInputTable.query.first()
     environment = EnvStateTable.query.first()
+    aws_acct_num = None
     aws_key_id = None
     aws_key_value = None
     terraform_org_name = None
@@ -30,6 +31,7 @@ def homepage():
     if request.method == 'POST':
         form = EnvVarForm()
         if form.validate_on_submit():
+            aws_acct_num = form.aws_acct_num.data
             aws_key_id = form.aws_key_id.data
             aws_key_value = form.aws_key_value.data
             terraform_org_name = form.terraform_org_name.data
@@ -37,6 +39,7 @@ def homepage():
             recovery_email = form.recovery_email.data
             if user is None:
                 entry = EnvInputTable(
+                    db_aws_acct_num=aws_acct_num,
                     db_aws_key_id=aws_key_id,
                     db_aws_key_value=aws_key_value,
                     db_terraform_org_name=terraform_org_name,
@@ -47,6 +50,11 @@ def homepage():
                 db.session.commit()
                 return redirect(url_for('routes.homepage'))
             else:
+                if form.aws_acct_num == '':
+                    pass
+                else:
+                    user.db_aws_acct_num = aws_key_id
+                    db.session.commit()
                 if form.aws_key_id == '':
                     pass
                 else:
@@ -95,11 +103,15 @@ def homepage():
             db.session.commit()
             return redirect(url_for('routes.homepage'))
         if request.form['submit_button'] == 'Launch Lab-1':
-            Launch_Lab1()
-            state = 'lab1'
-            environment.db_environment_state = state
-            db.session.commit()
-            return redirect(url_for('routes.homepage'))
+            aws_acct_num = user.db_aws_acct_num
+            if aws_acct_num != '':
+                Launch_Lab1()
+                state = 'lab1'
+                environment.db_environment_state = state
+                db.session.commit()
+                return redirect(url_for('routes.homepage'))
+            else:
+                pass
         if request.form['submit_button'] == 'Destroy Lab-1':
             Destroy_Lab1()
             state = 'new'
