@@ -67,3 +67,13 @@ class EnvStateTable(db.Model):
         nullable=True,
         unique=True
     )
+    db_lab1_workspace_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
+    db_lab1_tf_config_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
