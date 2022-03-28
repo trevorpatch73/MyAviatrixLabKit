@@ -5,6 +5,7 @@ from .data_models import EnvInputTable, EnvStateTable
 from . import db
 from .buttons import Launch_Environment, Destroy_Environment
 from .sst_fx import sst_mode_selection, sst_aws_config, sst_launch_controller, sst_launch_transit_aws, sst_launch_ec2_spokevpc, sst_skip_transit_azure, sst_controller_ip, sst_delete_resources
+from lab1_fx import Launch_Lab1, Destroy_Lab1
 
 routes = Blueprint('routes', __name__)
 
@@ -89,6 +90,18 @@ def homepage():
         if request.form['submit_button'] == 'Destroy Environment':
             sst_delete_resources()
             Destroy_Environment()
+            state = 'new'
+            environment.db_environment_state = state
+            db.session.commit()
+            return redirect(url_for('routes.homepage'))
+        if request.form['submit_button'] == 'Launch Lab-1':
+            Launch_Lab1()
+            state = 'lab1'
+            environment.db_environment_state = state
+            db.session.commit()
+            return redirect(url_for('routes.homepage'))
+        if request.form['submit_button'] == 'Destroy Lab-1':
+            Destroy_Lab1()
             state = 'new'
             environment.db_environment_state = state
             db.session.commit()
