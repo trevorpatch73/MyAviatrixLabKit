@@ -3,7 +3,7 @@ terraform {
   required_providers {
     aviatrix = {
       source = "AviatrixSystems/aviatrix"
-      version = "2.21.0"
+      version = "2.21.2"
     }
   }
 }
@@ -82,6 +82,7 @@ resource "aviatrix_transit_gateway" "AWS-US-E2-TRNST-GW" {
   }
   enable_hybrid_connection = false
   connected_transit        = true
+  #enable_active_mesh	   = false
 }
 
 # Create an Aviatrix AWS SS Spoke Gateway
@@ -96,6 +97,7 @@ resource "aviatrix_spoke_gateway" "AWS-US-E2-SHR-SVCS-SPOKE-GW" {
   single_ip_snat                    = false
   manage_transit_gateway_attachment = false
   allocate_new_eip                  = true
+  #enable_active_mesh	            = false
   tags                              = {
     name = "aviatrix"
   }
@@ -113,7 +115,18 @@ resource "aviatrix_spoke_gateway" "AWS-US-W2-BU1-MONO-SPOKE-GW" {
   single_ip_snat                    = false
   manage_transit_gateway_attachment = false
   allocate_new_eip                  = true
+  #enable_active_mesh	            = false
   tags                              = {
     name = "aviatrix"
   }
+}
+
+# Create an Aviatrix Spoke Transit Attachment
+resource "aviatrix_spoke_transit_attachment" "SS-SPOKE_TRNST_ATTACHMENT" {
+  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-E2-SHR-SVCS-SPOKE-GW.gw_name
+  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
+}
+resource "aviatrix_spoke_transit_attachment" "BU1-SPOKE_TRNST_ATTACHMENT" {
+  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-W2-BU1-MONO-SPOKE-GW.gw_name
+  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
 }
