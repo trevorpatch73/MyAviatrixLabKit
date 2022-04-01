@@ -119,6 +119,7 @@ def homepage():
             return redirect(url_for('routes.homepage'))
     else:
         form = EnvVarForm()
+    environment = EnvStateTable.query.first()
     if environment is None:
         state = 'new'
         entry = EnvStateTable(
@@ -144,10 +145,16 @@ def homepage():
         terraform_org_name = user.db_terraform_org_name
         terraform_api_key = user.db_terraform_api_key
         state = environment.db_environment_state
-        if aws_key_id != '' and aws_key_value != '' and terraform_org_name != '' and terraform_api_key != '' and state != 'launched':
+        if aws_key_id != '' and aws_key_value != '' and terraform_org_name != '' and terraform_api_key != '' and aws_acct_num != '':
             state = 'provision_controller'
             environment.db_environment_state = state
             db.session.commit()
+
+    fix = environment.db_malk_lab1_aviatrix_workspace_id
+    if fix != '':
+        state = 'lab1'
+        environment.db_environment_state = state
+        db.session.commit()
 
     return render_template(
         'homepage.html',

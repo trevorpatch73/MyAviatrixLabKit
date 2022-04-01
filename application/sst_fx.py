@@ -68,6 +68,12 @@ def sst_launch_controller():
                 print('status: ' + str(status))
                 print('retry: ' + str(retry))
                 sleep(5)
+        if stateName != 'launchController':
+            response = requests.post(
+                url, data=text, headers=sst_headers, verify=False)
+            retry += 1
+            print("Resending launch controller pay load to SST")
+            print('retry: ' + str(retry))
 
 
 def sst_launch_transit_aws():
