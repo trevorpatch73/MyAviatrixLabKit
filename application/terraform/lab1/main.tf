@@ -117,13 +117,3 @@ resource "aviatrix_spoke_gateway" "AWS-US-W2-BU1-MONO-SPOKE-GW" {
     name = "aviatrix"
   }
 }
-
-# Create an Aviatrix Spoke Transit Attachment
-#resource "aviatrix_spoke_transit_attachment" "SS-SPOKE_TRNST_ATTACHMENT" {
-#  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-E2-SHR-SVCS-SPOKE-GW.gw_name
-#  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
-#}
-#resource "aviatrix_spoke_transit_attachment" "BU1-SPOKE_TRNST_ATTACHMENT" {
-#  spoke_gw_name   = aviatrix_spoke_gateway.AWS-US-W2-BU1-MONO-SPOKE-GW.gw_name
-#  transit_gw_name = aviatrix_transit_gateway.AWS-US-E2-TRNST-GW.gw_name
-#}
