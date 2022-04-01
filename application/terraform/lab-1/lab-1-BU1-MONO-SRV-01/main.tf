@@ -57,7 +57,6 @@ resource "aws_instance" "BU1_MONO_SRV_01" {
         #!/bin/bash -ex
          yum -y install epel-release
          yum -y install iperf
-         iperf ${var.SHR_SVCS_SRV_01_PRIVATE_IP} --parallel 100 -i 1 -t 2
         EOF
     tags = {
         Project = "Aviatrix"

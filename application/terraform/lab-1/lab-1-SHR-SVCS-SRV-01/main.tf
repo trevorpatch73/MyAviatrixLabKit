@@ -56,7 +56,6 @@ resource "aws_instance" "SHR_SVCS_SRV_01" {
         #!/bin/bash -ex
          yum -y install epel-release
          yum -y install iperf
-         sudo iperf -s [-p 5001]
         EOF
     tags = {
         Project = "Aviatrix"
