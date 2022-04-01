@@ -5,7 +5,7 @@ from .data_models import EnvInputTable, EnvStateTable
 from . import db
 from .buttons import Launch_Environment, Destroy_Environment
 from .sst_fx import sst_mode_selection, sst_aws_config, sst_launch_controller, sst_launch_transit_aws, sst_launch_ec2_spokevpc, sst_skip_transit_azure, sst_controller_ip, sst_delete_resources
-from .lab1_fx import Launch_Lab1, Destroy_Lab1
+from .lab1_fx import Launch_Lab1_Aviatrix, Destroy_Lab1
 
 routes = Blueprint('routes', __name__)
 
@@ -53,7 +53,7 @@ def homepage():
                 if form.aws_acct_num == '':
                     pass
                 else:
-                    user.db_aws_acct_num = aws_key_id
+                    user.db_aws_acct_num = aws_acct_num
                     db.session.commit()
                 if form.aws_key_id == '':
                     pass
@@ -105,7 +105,7 @@ def homepage():
         if request.form['submit_button'] == 'Launch Lab-1':
             aws_acct_num = user.db_aws_acct_num
             if aws_acct_num != '':
-                Launch_Lab1()
+                Launch_Lab1_Aviatrix()
                 state = 'lab1'
                 environment.db_environment_state = state
                 db.session.commit()
@@ -128,8 +128,8 @@ def homepage():
             db_aviatrix_controller_public_ip=state,
             db_controller_workspace_id=state,
             db_aviatrix_controller_tf_config_id=state,
-            db_lab1_workspace_id=state,
-            db_lab1_tf_config_id=state
+            db_malk_lab1_aviatrix_workspace_id=state,
+            db_malk_lab1_aviatrix_tf_config_id=state
         )
         db.session.add(entry)
         db.session.commit()
