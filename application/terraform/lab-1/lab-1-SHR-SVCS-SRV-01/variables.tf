@@ -4,3 +4,9 @@ variable aws_key_id {
 variable aws_key_value {
     type = string 
 }
+variable vpc_id {
+    type = string 
+}
+variable subnet_id {
+    type = string 
+}

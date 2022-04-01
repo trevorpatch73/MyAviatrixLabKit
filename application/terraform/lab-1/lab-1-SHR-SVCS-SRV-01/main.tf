@@ -9,7 +9,7 @@ provider "aws" {
 resource "aws_security_group" "AA_AWS_US_E2_SS" {
   name        = "Any-Any"
   description = "Allow All Traffic"
-  vpc_id      = aviatrix_vpc.AWS-US-E2-SHR-SVCS-VPC.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description      = "Any-Any"
@@ -33,7 +33,7 @@ resource "aws_security_group" "AA_AWS_US_E2_SS" {
 
 #Create interfaces to reach our ping boxes
 resource "aws_network_interface" "SHR_SVCS_SRV_01_IFACE_01" {
-  subnet_id   = aviatrix_vpc.AWS-US-E2-SHR-SVCS-VPC.public_subnets[0].cidr
+  subnet_id   = var.subnet_id
   security_groups = [aws_security_group.AA_AWS_US_E2_SS.id]
 
   tags = {

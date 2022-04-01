@@ -10,7 +10,7 @@ provider "aws" {
 resource "aws_security_group" "AA_AWS_US_W2_BU1_Mono" {
   name        = "Any-Any"
   description = "Allow All Traffic"
-  vpc_id      = aviatrix_vpc.AWS-US-W2-BU1-MONO-VPC.id
+  vpc_id      = var.vpc_id
 
   ingress {
     description      = "Any-Any"
@@ -34,7 +34,7 @@ resource "aws_security_group" "AA_AWS_US_W2_BU1_Mono" {
 
 #Create interfaces to reach our ping boxes
 resource "aws_network_interface" "BU1_MONO_SRV_01_IFACE_01" {
-  subnet_id   = aviatrix_vpc.AWS-US-W2-BU1-MONO-VPC.public_subnets[0].cidr
+  subnet_id   = var.subnet_id
   security_groups = [aws_security_group.AA_AWS_US_W2_BU1_Mono.id]
 
   tags = {
@@ -57,7 +57,7 @@ resource "aws_instance" "BU1_MONO_SRV_01" {
         #!/bin/bash -ex
          yum -y install epel-release
          yum -y install iperf
-         iperf -c 172.31.1.152 --parallel 100 -i 1 -t 2
+         iperf ${var.SHR_SVCS_SRV_01_PRIVATE_IP} --parallel 100 -i 1 -t 2
         EOF
     tags = {
         Project = "Aviatrix"
@@ -66,7 +66,7 @@ resource "aws_instance" "BU1_MONO_SRV_01" {
 
 # Create & Attach EIPs for PingBoxes
 resource "aws_eip" "BU1_MONO_SRV_01_EIP" {
-  instance = aws_instance.SHR_SVCS_SRV_01.id
+  instance = aws_instance.BU1_MONO_SRV_01.id
   vpc      = true
 }
 
