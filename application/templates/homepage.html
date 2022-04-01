@@ -49,13 +49,13 @@
 </form>
 {% endif %}
 
-{% if state == 'launched'%}
+{% if state != ''%}
 <h1>Automated Lab Deployment Controls</h1>
 <form method = "POST">
     <div class="container shadow-lg p-3 mb-5 bg-body rounded bg-dark text-light">
         {% if state == 'launched'%}
         <input type="submit" name="submit_button" class="btn btn-info" value="Launch Lab-1">
-        {% elif state != 'lab1' %}
+        {% elif state == 'lab1' %}
         <input type="submit" name="submit_button" class="btn btn-danger" value="Destroy Lab-1">
         <br/><br/>
         {% else %}
