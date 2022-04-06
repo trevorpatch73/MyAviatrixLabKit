@@ -393,17 +393,41 @@ def Launch_Lab1_Aviatrix():
     jsonData = ''
     response = ''
 
-    # Step Seven: Get the text body back from the log read url to parse for controller IPs
+    # Step Seven: Get the text body back from the log read url to parse for subnet and vpc ids
 
     response = requests.get(log_read_url)
 
-    print('-------------------------------------')
-    print('-------------------------------------')
-    print('-------------------------------------')
-    print(response.text)
-    print('-------------------------------------')
-    print('-------------------------------------')
-    print('-------------------------------------')
+    data = response.text
+
+    objects = data.split('\n')
+
+    for object in objects:
+        if '"@message":"Outputs:' in object:
+            aws_us_e2_shr_svcs_subnet_id_pattern = re.findall(
+                r'({\"AWS-US-E2-SHR-SVCS-SUBNET-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
+            aws_us_e2_shr_svcs_subnet_id = re.findall(
+                r'(subnet-[\w]+)', aws_us_e2_shr_svcs_subnet_id_pattern[0])
+            print(
+                f'aws_us_e2_shr_svcs_subnet_id is {aws_us_e2_shr_svcs_subnet_id}')
+
+            aws_us_e2_shr_svcs_vpc_id_pattern = re.findall(
+                r'({\"AWS-US-E2-SHR-SVCS-VPC-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
+            aws_us_e2_shr_svcs_vpc_id = re.findall(
+                r'(vpc-[\w]+)', aws_us_e2_shr_svcs_vpc_id_pattern[0])
+            print(f'aws_us_e2_shr_svcs_vpc_id is {aws_us_e2_shr_svcs_vpc_id}')
+
+            aws_us_w2_bu1_mono_subnet_id_pattern = re.findall(
+                r'({\"AWS-US-W2-BU1-MONO-SUBNET-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
+            aws_us_w2_bu1_mono_subnet_id = re.findall(
+                r'(subnet-[\w]+)', aws_us_w2_bu1_mono_subnet_id_pattern[0])
+            print(
+                f'aws_us_w2_bu1_mono_subnet_id is {aws_us_w2_bu1_mono_subnet_id}')
+
+            aws_us_w2_bu1_mono_vpc_id_pattern = re.findall(
+                r'({\"AWS-US-W2-BU1-MONO-VPC-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
+            aws_us_w2_bu1_mono_vpc_id = re.findall(
+                r'(vpc-[\w]+)', aws_us_w2_bu1_mono_vpc_id_pattern[0])
+            print(f'aws_us_w2_bu1_mono_vpc_id is {aws_us_w2_bu1_mono_vpc_id}')
 
 
 def Destroy_Environment():
