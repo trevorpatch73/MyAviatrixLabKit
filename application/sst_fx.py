@@ -47,7 +47,7 @@ def sst_launch_controller():
     text = '{"email":"' + recovery_email + '","recovery_email":"' + recovery_email + \
         '","password":"P@ssw0rd","confirm_password":"P@ssw0rd","controller_license_type":"meteredplatinum","controller_license":""}'
     response = requests.post(url, data=text, headers=sst_headers, verify=False)
-    sleep(120)
+    sleep(180)
 
     # Check For Success
     check_url = ('https://' + target + '/api/v1.0/get-statestatus')
