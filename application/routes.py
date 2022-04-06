@@ -113,7 +113,7 @@ def homepage():
                 pass
         if request.form['submit_button'] == 'Destroy Lab-1':
             Destroy_Lab1()
-            state = 'new'
+            state = 'launched'
             environment.db_environment_state = state
             db.session.commit()
             return redirect(url_for('routes.homepage'))
