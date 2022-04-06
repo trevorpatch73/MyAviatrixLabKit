@@ -150,12 +150,6 @@ def homepage():
             environment.db_environment_state = state
             db.session.commit()
 
-    fix = environment.db_malk_lab1_aviatrix_workspace_id
-    if fix != '':
-        state = 'lab1'
-        environment.db_environment_state = state
-        db.session.commit()
-
     return render_template(
         'homepage.html',
         form=form,
