@@ -92,6 +92,16 @@ class EnvStateTable(db.Model):
         nullable=True,
         unique=True
     )
+    db_malk_lab1_bu1_workspace_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
+    db_malk_lab1_bu1_tf_config_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
     db_aws_us_e2_shr_svcs_subnet_id = db.Column(
         db.String(1000),
         nullable=True,

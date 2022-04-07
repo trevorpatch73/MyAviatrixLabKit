@@ -129,7 +129,15 @@ def homepage():
             db_controller_workspace_id=state,
             db_aviatrix_controller_tf_config_id=state,
             db_malk_lab1_aviatrix_workspace_id=state,
-            db_malk_lab1_aviatrix_tf_config_id=state
+            db_malk_lab1_aviatrix_tf_config_id=state,
+            db_malk_lab1_shr_svcs_workspace_id=state,
+            db_malk_lab1_shr_svcs_tf_config_id=state,
+            db_malk_lab1_bu1_workspace_id=state,
+            db_malk_lab1_bu1_tf_config_id=state,
+            db_aws_us_e2_shr_svcs_subnet_id=state,
+            db_aws_us_e2_shr_svcs_vpc_id=state,
+            db_aws_us_w2_bu1_mono_subnet_id=state,
+            db_aws_us_w2_bu1_mono_vpc_id=state
         )
         db.session.add(entry)
         db.session.commit()
