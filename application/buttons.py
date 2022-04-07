@@ -403,31 +403,48 @@ def Launch_Lab1_Aviatrix():
 
     for object in objects:
         if '"@message":"Outputs:' in object:
+            print('----------------------------')
+            print('----------------------------')
+            print('----------------------------')
+            print(f'{object}')
+            print('----------------------------')
+            print('----------------------------')
+            print('----------------------------')
+
             aws_us_e2_shr_svcs_subnet_id_pattern = re.findall(
-                r'({\"AWS-US-E2-SHR-SVCS-SUBNET-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
+                r'(\"AWS-US-E2-SHR-SVCS-SUBNET-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
             aws_us_e2_shr_svcs_subnet_id = re.findall(
                 r'(subnet-[\w]+)', aws_us_e2_shr_svcs_subnet_id_pattern[0])
             print(
                 f'aws_us_e2_shr_svcs_subnet_id is {aws_us_e2_shr_svcs_subnet_id}')
+            environment.db_aws_us_e2_shr_svcs_subnet_id = aws_us_e2_shr_svcs_subnet_id
+            db.session.commit()
 
             aws_us_e2_shr_svcs_vpc_id_pattern = re.findall(
-                r'({\"AWS-US-E2-SHR-SVCS-VPC-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
+                r'(\"AWS-US-E2-SHR-SVCS-VPC-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"vpc-[\w]+\"})', object)
+            print(f'{aws_us_e2_shr_svcs_vpc_id_pattern}')
             aws_us_e2_shr_svcs_vpc_id = re.findall(
                 r'(vpc-[\w]+)', aws_us_e2_shr_svcs_vpc_id_pattern[0])
             print(f'aws_us_e2_shr_svcs_vpc_id is {aws_us_e2_shr_svcs_vpc_id}')
+            environment.aws_us_e2_shr_svcs_vpc_id = aws_us_e2_shr_svcs_vpc_id
+            db.session.commit()
 
             aws_us_w2_bu1_mono_subnet_id_pattern = re.findall(
-                r'({\"AWS-US-W2-BU1-MONO-SUBNET-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
+                r'(\"AWS-US-W2-BU1-MONO-SUBNET-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
             aws_us_w2_bu1_mono_subnet_id = re.findall(
                 r'(subnet-[\w]+)', aws_us_w2_bu1_mono_subnet_id_pattern[0])
             print(
                 f'aws_us_w2_bu1_mono_subnet_id is {aws_us_w2_bu1_mono_subnet_id}')
+            environment.aws_us_w2_bu1_mono_subnet_id = aws_us_w2_bu1_mono_subnet_id
+            db.session.commit()
 
             aws_us_w2_bu1_mono_vpc_id_pattern = re.findall(
-                r'({\"AWS-US-W2-BU1-MONO-VPC-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"subnet-[\w]+\"})', object)
+                r'(\"AWS-US-W2-BU1-MONO-VPC-ID\":{\"[\w]+\":[\w]+,\"[\w]+\":\"[\w]+\",\"[\w]+\":\"vpc-[\w]+\"})', object)
             aws_us_w2_bu1_mono_vpc_id = re.findall(
                 r'(vpc-[\w]+)', aws_us_w2_bu1_mono_vpc_id_pattern[0])
             print(f'aws_us_w2_bu1_mono_vpc_id is {aws_us_w2_bu1_mono_vpc_id}')
+            environment.aws_us_w2_bu1_mono_vpc_id = aws_us_w2_bu1_mono_vpc_id
+            db.session.commit()
 
 
 def Destroy_Environment():

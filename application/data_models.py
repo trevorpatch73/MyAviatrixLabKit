@@ -82,3 +82,23 @@ class EnvStateTable(db.Model):
         nullable=True,
         unique=True
     )
+    db_aws_us_e2_shr_svcs_subnet_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
+    db_aws_us_e2_shr_svcs_vpc_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
+    db_aws_us_w2_bu1_mono_subnet_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
+    db_aws_us_w2_bu1_mono_vpc_id = db.Column(
+        db.String(1000),
+        nullable=True,
+        unique=True
+    )
