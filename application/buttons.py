@@ -359,8 +359,7 @@ def Launch_Lab1_Aviatrix():
     environment.db_malk_lab1_aviatrix_tf_config_id = config_id
     db.session.commit()
 
-    # Step Four: Upload AviatrixContoller.tar.gz to Terraform to deploy AWS elements &
-    # Aviatrix Controller within
+    # Step Four: Upload .tar.gz to Terraform to deploy AWS elements &
     p = Path(__file__).with_name('lab_1_aviatrix.tar.gz')
     with p.open('rb') as f:
         data = f.read()
@@ -445,6 +444,390 @@ def Launch_Lab1_Aviatrix():
             print(f'aws_us_w2_bu1_mono_vpc_id is {aws_us_w2_bu1_mono_vpc_id}')
             environment.aws_us_w2_bu1_mono_vpc_id = aws_us_w2_bu1_mono_vpc_id
             db.session.commit()
+
+
+def Launch_Lab1_SHR_SVCS():
+    user = EnvInputTable.query.first()
+    environment = EnvStateTable.query.first()
+    aws_key_id = user.db_aws_key_id
+    aws_key_value = user.db_aws_key_value
+    terraform_api_key = user.db_terraform_api_key
+    terraform_org_name = user.db_terraform_org_name
+    aws_us_e2_shr_svcs_subnet_id = environment.db_aws_us_e2_shr_svcs_subnet_id
+    aws_us_e2_shr_svcs_vpc_id = environment.aws_us_e2_shr_svcs_vpc_id
+    terraform_header = {
+        'Authorization': 'Bearer ' + terraform_api_key,
+        'Content-Type': 'application/vnd.api+json'
+    }
+    terraform_url = 'app.terraform.io/api/v2'
+
+    # Step One: Create a workspace in TF Cloud
+    jsonData = {
+        "data": {
+            "attributes": {
+                "name": "MALK_LAB1_SHR_SVCS_WORKSPACE",
+                "description": "created via API",
+                "auto-apply": True
+            },
+            "type": "workspaces"
+        }
+    }
+
+    url = ('https://' + terraform_url + '/organizations/' +
+           terraform_org_name + '/workspaces')
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    data_json = response.json()
+    malk_lab1_shr_svcs_workspace_id = data_json['data']['id']
+    environment.db_malk_lab1_shr_svcs_workspace_id = malk_lab1_shr_svcs_workspace_id
+    db.session.commit()
+
+    url = ''
+    jsonData = ''
+    response = ''
+
+    # Step Two: Inject Variables into created TF Cloud workspace
+    url = ('https://' + terraform_url + '/vars')
+
+    jsonData = {
+        "data": {
+            "type": "vars",
+            "attributes": {
+                "key": "aws_key_id",
+                "value": aws_key_id,
+                "description": "AWS API Key ID",
+                "category": "terraform",
+                # "sensitive": True
+            },
+            "relationships": {
+                "workspace": {
+                    "data": {
+                        "id": malk_lab1_shr_svcs_workspace_id,
+                        "type": "workspaces"
+                    }
+                }
+            }
+        }
+    }
+    sleep(1)
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    jsonData = ''
+    response = ''
+
+    jsonData = {
+        "data": {
+            "type": "vars",
+            "attributes": {
+                "key": "aws_key_value",
+                "value": aws_key_value,
+                "description": "SENSITIVE AWS INFORMATION",
+                "category": "terraform",
+                "sensitive": True
+            },
+            "relationships": {
+                "workspace": {
+                    "data": {
+                        "id": malk_lab1_shr_svcs_workspace_id,
+                        "type": "workspaces"
+                    }
+                }
+            }
+        }
+    }
+    sleep(1)
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    jsonData = ''
+    response = ''
+
+    jsonData = {
+        "data": {
+            "type": "vars",
+            "attributes": {
+                "key": "aws_us_e2_shr_svcs_subnet_id",
+                "value": aws_us_e2_shr_svcs_subnet_id,
+                "description": "AWS Subnet ID",
+                "category": "terraform",
+                "sensitive": False
+            },
+            "relationships": {
+                "workspace": {
+                    "data": {
+                        "id": malk_lab1_shr_svcs_workspace_id,
+                        "type": "workspaces"
+                    }
+                }
+            }
+        }
+    }
+    sleep(1)
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    jsonData = ''
+    response = ''
+
+    jsonData = {
+        "data": {
+            "type": "vars",
+            "attributes": {
+                "key": "aws_us_e2_shr_svcs_vpc_id",
+                "value": aws_us_e2_shr_svcs_vpc_id,
+                "description": "AWS VPC ID",
+                "category": "terraform",
+                "sensitive": False
+            },
+            "relationships": {
+                "workspace": {
+                    "data": {
+                        "id": malk_lab1_shr_svcs_workspace_id,
+                        "type": "workspaces"
+                    }
+                }
+            }
+        }
+    }
+    sleep(1)
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    jsonData = ''
+    response = ''
+
+    # Step Three: Get a configuration upload URL for the workspace
+    url = ('https://' + terraform_url + '/workspaces/' +
+           malk_lab1_shr_svcs_workspace_id + '/configuration-versions')
+
+    jsonData = {
+        "data": {
+            "type": "configuration-versions",
+            "attributes": {
+                "auto-queue-runs": True
+            }
+        }
+    }
+
+    sleep(1)
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+    data_json = response.json()
+
+    # Parse out the upload URL
+    upload_url = data_json['data']['attributes']['upload-url']
+
+    # Parse and store configuration id to destory environment later.
+    config_id = data_json['data']['id']
+    environment.db_malk_lab1_shr_svcs_tf_config_id = config_id
+    db.session.commit()
+
+    # Step Four: Upload tar.gz to Terraform to deploy AWS elements &
+    p = Path(__file__).with_name('lab_1_shr_svcs.tar.gz')
+    with p.open('rb') as f:
+        data = f.read()
+
+    response = requests.put(upload_url, data=data,
+                            headers={'Content-Type': 'application/octet-stream'})
+
+    sleep(120)
+
+    url = ''
+    jsonData = ''
+    response = ''
+
+
+def Launch_Lab1_BU1():
+    user = EnvInputTable.query.first()
+    environment = EnvStateTable.query.first()
+    aws_key_id = user.db_aws_key_id
+    aws_key_value = user.db_aws_key_value
+    terraform_api_key = user.db_terraform_api_key
+    terraform_org_name = user.db_terraform_org_name
+    aws_us_w2_bu1_mono_subnet_id = environment.db_aws_us_w2_bu1_mono_subnet_id
+    aws_us_w2_bu1_mono_vpc_id = environment.aws_us_w2_bu1_mono_vpc_id
+    terraform_header = {
+        'Authorization': 'Bearer ' + terraform_api_key,
+        'Content-Type': 'application/vnd.api+json'
+    }
+    terraform_url = 'app.terraform.io/api/v2'
+
+    # Step One: Create a workspace in TF Cloud
+    jsonData = {
+        "data": {
+            "attributes": {
+                "name": "MALK_LAB1_BU1_WORKSPACE",
+                "description": "created via API",
+                "auto-apply": True
+            },
+            "type": "workspaces"
+        }
+    }
+
+    url = ('https://' + terraform_url + '/organizations/' +
+           terraform_org_name + '/workspaces')
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    data_json = response.json()
+    malk_lab1_bu1_workspace_id = data_json['data']['id']
+    environment.db_malk_lab1_bu1_workspace_id = malk_lab1_bu1_workspace_id
+    db.session.commit()
+
+    url = ''
+    jsonData = ''
+    response = ''
+
+    # Step Two: Inject Variables into created TF Cloud workspace
+    url = ('https://' + terraform_url + '/vars')
+
+    jsonData = {
+        "data": {
+            "type": "vars",
+            "attributes": {
+                "key": "aws_key_id",
+                "value": aws_key_id,
+                "description": "AWS API Key ID",
+                "category": "terraform",
+                # "sensitive": True
+            },
+            "relationships": {
+                "workspace": {
+                    "data": {
+                        "id": malk_lab1_bu1_workspace_id,
+                        "type": "workspaces"
+                    }
+                }
+            }
+        }
+    }
+    sleep(1)
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    jsonData = ''
+    response = ''
+
+    jsonData = {
+        "data": {
+            "type": "vars",
+            "attributes": {
+                "key": "aws_key_value",
+                "value": aws_key_value,
+                "description": "SENSITIVE AWS INFORMATION",
+                "category": "terraform",
+                "sensitive": True
+            },
+            "relationships": {
+                "workspace": {
+                    "data": {
+                        "id": malk_lab1_bu1_workspace_id,
+                        "type": "workspaces"
+                    }
+                }
+            }
+        }
+    }
+    sleep(1)
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    jsonData = ''
+    response = ''
+
+    jsonData = {
+        "data": {
+            "type": "vars",
+            "attributes": {
+                "key": "aws_us_w2_bu1_mono_subnet_id",
+                "value": aws_us_w2_bu1_mono_subnet_id,
+                "description": "AWS Subnet ID",
+                "category": "terraform",
+                "sensitive": False
+            },
+            "relationships": {
+                "workspace": {
+                    "data": {
+                        "id": malk_lab1_bu1_workspace_id,
+                        "type": "workspaces"
+                    }
+                }
+            }
+        }
+    }
+    sleep(1)
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    jsonData = ''
+    response = ''
+
+    jsonData = {
+        "data": {
+            "type": "vars",
+            "attributes": {
+                "key": "aws_us_w2_bu1_mono_vpc_id",
+                "value": aws_us_w2_bu1_mono_vpc_id,
+                "description": "AWS VPC ID",
+                "category": "terraform",
+                "sensitive": False
+            },
+            "relationships": {
+                "workspace": {
+                    "data": {
+                        "id": malk_lab1_bu1_workspace_id,
+                        "type": "workspaces"
+                    }
+                }
+            }
+        }
+    }
+    sleep(1)
+
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+
+    jsonData = ''
+    response = ''
+
+    # Step Three: Get a configuration upload URL for the workspace
+    url = ('https://' + terraform_url + '/workspaces/' +
+           malk_lab1_bu1_workspace_id + '/configuration-versions')
+
+    jsonData = {
+        "data": {
+            "type": "configuration-versions",
+            "attributes": {
+                "auto-queue-runs": True
+            }
+        }
+    }
+
+    sleep(1)
+    response = requests.post(url, json=jsonData, headers=terraform_header)
+    data_json = response.json()
+
+    # Parse out the upload URL
+    upload_url = data_json['data']['attributes']['upload-url']
+
+    # Parse and store configuration id to destory environment later.
+    config_id = data_json['data']['id']
+    environment.db_malk_lab1_bu1_tf_config_id = config_id
+    db.session.commit()
+
+    # Step Four: Upload tar.gz to Terraform to deploy AWS elements &
+    p = Path(__file__).with_name('lab_1_bu1.tar.gz')
+    with p.open('rb') as f:
+        data = f.read()
+
+    response = requests.put(upload_url, data=data,
+                            headers={'Content-Type': 'application/octet-stream'})
+
+    sleep(120)
+
+    url = ''
+    jsonData = ''
+    response = ''
 
 
 def Destroy_Environment():
