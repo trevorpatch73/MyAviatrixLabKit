@@ -367,7 +367,7 @@ def Launch_Lab1_Aviatrix():
     response = requests.put(upload_url, data=data,
                             headers={'Content-Type': 'application/octet-stream'})
 
-    sleep(120)
+    sleep(600)
 
     url = ''
     jsonData = ''
@@ -416,7 +416,7 @@ def Launch_Lab1_Aviatrix():
                 r'(subnet-[\w]+)', aws_us_e2_shr_svcs_subnet_id_pattern[0])
             print(
                 f'aws_us_e2_shr_svcs_subnet_id is {aws_us_e2_shr_svcs_subnet_id}')
-            environment.db_aws_us_e2_shr_svcs_subnet_id = aws_us_e2_shr_svcs_subnet_id
+            environment.db_aws_us_e2_shr_svcs_subnet_id = aws_us_e2_shr_svcs_subnet_id[0]
             db.session.commit()
 
             aws_us_e2_shr_svcs_vpc_id_pattern = re.findall(
@@ -425,7 +425,7 @@ def Launch_Lab1_Aviatrix():
             aws_us_e2_shr_svcs_vpc_id = re.findall(
                 r'(vpc-[\w]+)', aws_us_e2_shr_svcs_vpc_id_pattern[0])
             print(f'aws_us_e2_shr_svcs_vpc_id is {aws_us_e2_shr_svcs_vpc_id}')
-            environment.aws_us_e2_shr_svcs_vpc_id = aws_us_e2_shr_svcs_vpc_id
+            environment.aws_us_e2_shr_svcs_vpc_id = aws_us_e2_shr_svcs_vpc_id[0]
             db.session.commit()
 
             aws_us_w2_bu1_mono_subnet_id_pattern = re.findall(
@@ -434,7 +434,7 @@ def Launch_Lab1_Aviatrix():
                 r'(subnet-[\w]+)', aws_us_w2_bu1_mono_subnet_id_pattern[0])
             print(
                 f'aws_us_w2_bu1_mono_subnet_id is {aws_us_w2_bu1_mono_subnet_id}')
-            environment.aws_us_w2_bu1_mono_subnet_id = aws_us_w2_bu1_mono_subnet_id
+            environment.aws_us_w2_bu1_mono_subnet_id = aws_us_w2_bu1_mono_subnet_id[0]
             db.session.commit()
 
             aws_us_w2_bu1_mono_vpc_id_pattern = re.findall(
@@ -442,7 +442,7 @@ def Launch_Lab1_Aviatrix():
             aws_us_w2_bu1_mono_vpc_id = re.findall(
                 r'(vpc-[\w]+)', aws_us_w2_bu1_mono_vpc_id_pattern[0])
             print(f'aws_us_w2_bu1_mono_vpc_id is {aws_us_w2_bu1_mono_vpc_id}')
-            environment.aws_us_w2_bu1_mono_vpc_id = aws_us_w2_bu1_mono_vpc_id
+            environment.aws_us_w2_bu1_mono_vpc_id = aws_us_w2_bu1_mono_vpc_id[0]
             db.session.commit()
 
 
